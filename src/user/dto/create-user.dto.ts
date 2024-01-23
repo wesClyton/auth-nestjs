@@ -1,5 +1,7 @@
-import { IsEmail, IsString, Matches, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsIn, IsInt, IsOptional, IsString, IsStrongPassword, MaxLength, MinLength } from "class-validator";
 import { User } from "../entities/user.entity";
+import { Unique } from "src/shared/decorator/is-unique.decorator";
+import { Request } from 'express';
 
 export class CreateUserDto extends User {
     @IsEmail()
@@ -8,11 +10,14 @@ export class CreateUserDto extends User {
     @IsString()
     @MinLength(4)
     @MaxLength(20)
-    @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-        message: 'Senha fraca',
+    @IsStrongPassword({
+        minLength: 6
     })
     password: string;
     
     @IsString()
     name: string;
+
+    @IsOptional()
+    level: number;
 }
