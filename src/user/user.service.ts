@@ -5,13 +5,18 @@ import * as bcrypt from "bcrypt";
 import { UpdatePatchUserDto } from './dto/update-patch-user.dto';
 import { UpdatePutUserDto } from './dto/update-put-user.dto';
 import { ValidateService } from 'src/shared/service/validate.service';
+import { PaginateFunction, PaginatorService } from 'src/shared/service/paginate.service';
+import { Prisma } from '@prisma/client';
 
 @Injectable()
 export class UserService {
 
+  paginate: PaginateFunction;
+
   constructor(
     private prisma: PrismaService, 
-    private validateService: ValidateService
+    private validateService: ValidateService,
+    private paginatorService: PaginatorService
   ){}
 
   async create(createUserDto: CreateUserDto) {
@@ -32,8 +37,38 @@ export class UserService {
     };
   }
 
-  findAll() {
-    return this.prisma.user.findMany();
+  async findMany({ page, perPage, name }:{
+    page?: number,
+    perPage?: number,
+    order?: string,
+    name?: string
+  }): Promise<any> { //PaginatedResult<User>
+
+      let where: Prisma.UserWhereInput = {};
+      let orderBy: Prisma.UserOrderByWithRelationInput = {};
+
+      orderBy = {
+        name: 'asc',
+      }
+
+      where = {
+        name: {
+          contains: name,
+          mode: 'insensitive'
+        }
+      }
+
+      return this.paginatorService.paginator(
+          this.prisma.user,
+          {
+              where,
+              orderBy,
+          },
+          {
+              page,
+              perPage: 5
+          },
+      );
   }
 
   findOne(id: string) {
@@ -52,11 +87,11 @@ export class UserService {
 
     await this.validateService.fieldExists({ model: 'user', property: 'email', value: email, id });
 
-    if(!level) {
-      level = undefined;
+    if(isNaN(level) || !level) {
+      level = 0;
     }
 
-    return this.prisma.user.update({
+    return await this.prisma.user.update({
       data: { email, level, name, password },
       where: {
         id
@@ -69,6 +104,7 @@ export class UserService {
     const data: any = {}
 
     for (const property in updatePatchUserDto) {
+      console.log('property', property)
       if(property) {
         data[property] = updatePatchUserDto[property]
       }

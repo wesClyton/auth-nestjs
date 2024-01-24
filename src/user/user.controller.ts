@@ -1,10 +1,18 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseInterceptors, Query, HttpCode } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, Put, UseInterceptors, HttpCode, Req, Query } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
 import { UpdatePutUserDto } from './dto/update-put-user.dto';
 import { UpdatePatchUserDto } from './dto/update-patch-user.dto';
 import { IsValidIdInterceptor } from 'src/shared/interceptor/is-valid-id.interceptor';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { Request } from 'express';
+
+
+export interface IParamsUserSearch {
+  page?: number,
+  perPage?: number,
+  name?: string
+}
 
 @Controller('user')
 export class UserController {
@@ -29,8 +37,10 @@ export class UserController {
   }
 
   @Get()
-  findAll() {
-    return this.userService.findAll();
+  findMany(
+    @Query() query: IParamsUserSearch
+  ) {
+    return this.userService.findMany(query);
   }
 
   

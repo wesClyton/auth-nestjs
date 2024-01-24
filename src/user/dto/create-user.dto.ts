@@ -1,7 +1,6 @@
-import { IsEmail, IsIn, IsInt, IsOptional, IsString, IsStrongPassword, MaxLength, MinLength } from "class-validator";
+import { IsEmail, IsEmpty, IsNumber, IsOptional, IsString, IsStrongPassword, MaxLength, MinLength } from "class-validator";
 import { User } from "../entities/user.entity";
-import { Unique } from "src/shared/decorator/is-unique.decorator";
-import { Request } from 'express';
+import { Transform } from "class-transformer";
 
 export class CreateUserDto extends User {
     @IsEmail()
@@ -19,5 +18,7 @@ export class CreateUserDto extends User {
     name: string;
 
     @IsOptional()
+    @Transform(({ value }) => Number(value))
+    @IsNumber()
     level: number;
 }
