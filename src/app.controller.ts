@@ -1,8 +1,7 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service';
-import { IsPublic } from './auth/decorators/is-public.decorator';
-import { CurrentUser } from './auth/decorators/current-user.decorator';
-import { User } from './user/entities/user.entity';
+import { Controller, Get } from "@nestjs/common";
+import { AppService } from "./app.service";
+import { User } from "./user/entities/user.entity";
+import { CurrentUser, IsPublic } from "./auth/decorators";
 
 @Controller()
 export class AppController {
@@ -14,8 +13,8 @@ export class AppController {
     return this.appService.getHello();
   }
 
-  @Get('me')
-  getMe( @CurrentUser() user: User) {
+  @Get("me")
+  getMe(@CurrentUser() user: User) {
     return user;
   }
 }

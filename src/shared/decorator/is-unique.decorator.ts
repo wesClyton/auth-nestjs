@@ -1,26 +1,26 @@
-import { PrismaService } from '../../prisma/prisma.service';
+import { PrismaService } from "../../prisma/prisma.service";
 import {
   registerDecorator,
   ValidationOptions,
   ValidatorConstraint,
   ValidatorConstraintInterface,
   ValidationArguments,
-} from 'class-validator';
-import { Injectable } from '@nestjs/common';
+} from "class-validator";
+import { Injectable } from "@nestjs/common";
 
-@ValidatorConstraint({ name: 'Unique', async: true })
+@ValidatorConstraint({ name: "Unique", async: true })
 @Injectable()
 export class UniqueConstraint implements ValidatorConstraintInterface {
   constructor(private readonly prisma: PrismaService) {}
 
   async validate(value: any, args: ValidationArguments): Promise<boolean> {
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [model, property, id] = args.constraints;
 
-
-    console.log('id: ', id);
+    console.log("id: ", id);
 
     // if (!value || !model) return false;
-    
+
     // //@ts-ignore
     // const userSelf = await this.prisma[model].findUnique({
     //   where: {
@@ -59,9 +59,9 @@ export class UniqueConstraint implements ValidatorConstraintInterface {
 }
 
 export function Unique(
-  obj: { 
-    model: string,
-    uniqueField: string,
+  obj: {
+    model: string;
+    uniqueField: string;
   },
   validationOptions?: ValidationOptions,
 ) {

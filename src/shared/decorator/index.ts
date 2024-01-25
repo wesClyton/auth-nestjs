@@ -1,1 +1,1 @@
-export { UniqueConstraint } from './is-unique.decorator';
+export { UniqueConstraint } from "./is-unique.decorator";
