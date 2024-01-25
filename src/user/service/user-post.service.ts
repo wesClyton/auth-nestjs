@@ -1,8 +1,8 @@
 import { PrismaService } from "src/prisma/prisma.service";
-import { CreateUserDto } from "../dto/create-user.dto";
 import { Injectable } from "@nestjs/common";
 import * as bcrypt from "bcrypt";
 import { ValidateService } from "src/shared/service";
+import { CreateUserDto } from "../dto";
 
 @Injectable()
 export class UserPostService {

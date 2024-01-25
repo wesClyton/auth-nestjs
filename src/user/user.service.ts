@@ -1,7 +1,5 @@
 import { Injectable } from "@nestjs/common";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdatePatchUserDto } from "./dto/update-patch-user.dto";
-import { UpdatePutUserDto } from "./dto/update-put-user.dto";
+import { CreateUserDto, UpdatePatchUserDto, UpdatePutUserDto } from "./dto";
 import { UserDeleteService, UserGetService, UserPatchService, UserPostService, UserPutService } from "./service";
 
 @Injectable()

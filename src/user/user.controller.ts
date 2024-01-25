@@ -12,11 +12,8 @@ import {
   Query,
 } from "@nestjs/common";
 import { UserService } from "./user.service";
-import { CreateUserDto } from "./dto/create-user.dto";
-import { UpdatePutUserDto } from "./dto/update-put-user.dto";
-import { UpdatePatchUserDto } from "./dto/update-patch-user.dto";
+import { CreateUserDto, UpdatePutUserDto, UpdatePatchUserDto, GetManyUserDto } from "./dto";
 import { PrismaService } from "src/prisma/prisma.service";
-import { IParamsSearchUser } from "./interface";
 import { IsValidIdInterceptor } from "src/shared/interceptor";
 
 @Controller("user")
@@ -38,7 +35,7 @@ export class UserController {
   }
 
   @Get()
-  findMany(@Query() query: IParamsSearchUser) {
+  findMany(@Query() query: GetManyUserDto) {
     return this.userService.findMany(query);
   }
 

@@ -1,5 +1,5 @@
 import { IsEmail, IsNumber, IsOptional, IsString, IsStrongPassword, MaxLength, MinLength } from "class-validator";
-import { User } from "../entities/user.entity";
+import { User } from "../entity/user.entity";
 import { Transform } from "class-transformer";
 
 export class CreateUserDto extends User {

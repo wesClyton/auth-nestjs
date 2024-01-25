@@ -1,10 +1,9 @@
 import { Injectable } from "@nestjs/common";
 import { JwtService } from "@nestjs/jwt";
 import * as bcrypt from "bcrypt";
-import { User } from "../user/entities/user.entity";
+import { User } from "../user/entity/user.entity";
 import { UserService } from "../user/user.service";
-import { UserPayload } from "./models/UserPayload";
-import { UserToken } from "./models/UserToken";
+import { IUserPayload, IUserToken } from "./interface";
 import { UnauthorizedError } from "./errors";
 
 @Injectable()
@@ -14,8 +13,8 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
-  async login(user: User): Promise<UserToken> {
-    const payload: UserPayload = {
+  async login(user: User): Promise<IUserToken> {
+    const payload: IUserPayload = {
       sub: user.id,
       email: user.email,
       name: user.name,

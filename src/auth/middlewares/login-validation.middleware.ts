@@ -1,14 +1,14 @@
 import { BadRequestException, Injectable, NestMiddleware } from "@nestjs/common";
 import { NextFunction, Request, Response } from "express";
-import { LoginRequestBody } from "../models/LoginRequestBody";
 import { validate } from "class-validator";
+import { LoginRequestBodyDto } from "../dto";
 
 @Injectable()
 export class LoginValidationMiddleware implements NestMiddleware {
   async use(req: Request, res: Response, next: NextFunction) {
     const body = req.body;
 
-    const loginRequestBody = new LoginRequestBody();
+    const loginRequestBody = new LoginRequestBodyDto();
     loginRequestBody.email = body.email;
     loginRequestBody.password = body.password;
 

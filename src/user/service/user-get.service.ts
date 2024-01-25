@@ -1,7 +1,9 @@
 import { Injectable } from "@nestjs/common";
-import { Prisma } from "@prisma/client";
+import { Prisma, User } from "@prisma/client";
 import { PrismaService } from "src/prisma/prisma.service";
+import { PaginatedResult } from "src/shared/interface";
 import { PaginatorService } from "src/shared/service";
+import { GetManyUserDto } from "../dto";
 
 @Injectable()
 export class UserGetService {
@@ -22,30 +24,34 @@ export class UserGetService {
     });
   }
 
-  async findMany({
-    page,
-    perPage,
-    name,
-  }: {
-    page?: number;
-    perPage?: number;
-    order?: string;
-    name?: string;
-  }): Promise<any> {
-    //PaginatedResult<User>
-
+  async findMany(params: GetManyUserDto): Promise<PaginatedResult<User>> {
     let where: Prisma.UserWhereInput = {};
     let orderBy: Prisma.UserOrderByWithRelationInput = {};
 
+    const { page, perPage, name, email, id, orderProperty } = params;
+
     orderBy = {
-      name: "asc",
+      ...(params.orderBy ? { [orderProperty]: params.orderBy } : {}),
     };
 
     where = {
-      name: {
-        contains: name,
-        mode: "insensitive",
-      },
+      ...(id ? { id } : {}),
+      ...(name
+        ? {
+            name: {
+              contains: name,
+              mode: "insensitive",
+            },
+          }
+        : {}),
+      ...(email
+        ? {
+            email: {
+              contains: email,
+              mode: "insensitive",
+            },
+          }
+        : {}),
     };
 
     return this.paginatorService.paginator(
